@@ -17,5 +17,3 @@ class NotificationSettings(models.Model):
     push_notifications = models.BooleanField(default=True)
     notification_frequency = models.CharField(max_length=50)
 
-    def __str__(self):
-        return self.user.username
