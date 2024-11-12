@@ -1,6 +1,13 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework import viewsets
+from .models import AccountSettings, NotificationSettings
+from .serializers import AccountSettingsSerializer, NotificationSettingsSerializer
 
-# Create your views here.
-def say_hello(request):
-    return HttpResponse('Hello, Django!')
+
+class AccountSettingsViewSet(viewsets.ModelViewSet):
+    queryset = AccountSettings.objects.all()
+    serializer_class = AccountSettingsSerializer
+
+
+class NotificationSettingsViewSet(viewsets.ModelViewSet):
+    queryset = NotificationSettings.objects.all()
+    serializer_class = NotificationSettingsSerializer
