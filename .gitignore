@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+*.env
+.venv/
+.venv
+
+# Django
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+db.sqlite3
+
+# Migrations
+**/migrations/**
+
+# Django Static Files
+staticfiles/
+media/
+
+# Local Settings
+local_settings.py
+
+# Secrets and Environment Variables
+.env
+
+# Pytest
+.pytest_cache/
+.cache
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+
+# MyPy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Node Modules
+node_modules/
