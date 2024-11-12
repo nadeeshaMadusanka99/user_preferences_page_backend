@@ -1,7 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
-#URL config
+router = DefaultRouter()
+router.register('account-settings', views.AccountSettingsViewSet)
+router.register('notification-settings', views.NotificationSettingsViewSet)
+
 urlpatterns = [
-    path('hello/', views.say_hello)
+    path('', include(router.urls)),
 ]
