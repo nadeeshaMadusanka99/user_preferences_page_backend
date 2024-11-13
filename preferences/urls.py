@@ -5,6 +5,8 @@ from . import views
 router = DefaultRouter()
 router.register(r'account-settings', views.AccountSettingViewSet)
 router.register(r'notification-settings', views.NotificationSettingViewSet)
+router.register(r'theme-settings', views.ThemeSettingViewSet)
+router.register(r'privacy-settings', views.PrivacySettingViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
