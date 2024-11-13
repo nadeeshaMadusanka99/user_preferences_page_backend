@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import AccountSetting, NotificationSetting, ThemeSetting
+from .models import AccountSetting, NotificationSetting, ThemeSetting, PrivacySetting
 
 
 class AccountSettingSerializer(serializers.ModelSerializer):
@@ -22,5 +22,5 @@ class ThemeSettingSerializer(serializers.ModelSerializer):
 
 class PrivacySettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ThemeSetting
+        model = PrivacySetting
         fields = ['id', 'profile_visibility', 'data_sharing']
