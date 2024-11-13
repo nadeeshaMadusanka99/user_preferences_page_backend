@@ -1,13 +1,13 @@
 from rest_framework import viewsets
-from .models import AccountSettings, NotificationSettings
-from .serializers import AccountSettingsSerializer, NotificationSettingsSerializer
+from .models import AccountSetting, NotificationSetting
+from .serializers import AccountSettingSerializer, NotificationSettingSerializer
 
 
-class AccountSettingsViewSet(viewsets.ModelViewSet):
-    queryset = AccountSettings.objects.all()
-    serializer_class = AccountSettingsSerializer
+class AccountSettingViewSet(viewsets.ModelViewSet):
+    queryset = AccountSetting.objects.all()
+    serializer_class = AccountSettingSerializer
 
 
-class NotificationSettingsViewSet(viewsets.ModelViewSet):
-    queryset = NotificationSettings.objects.all()
-    serializer_class = NotificationSettingsSerializer
+class NotificationSettingViewSet(viewsets.ModelViewSet):
+    queryset = NotificationSetting.objects.all()
+    serializer_class = NotificationSettingSerializer

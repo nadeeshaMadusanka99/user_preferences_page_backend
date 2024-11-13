@@ -1,14 +1,14 @@
 from rest_framework import serializers
-from .models import AccountSettings, NotificationSettings
+from .models import AccountSetting, NotificationSetting
 
 
-class AccountSettingsSerializer(serializers.ModelSerializer):
+class AccountSettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AccountSettings
+        model = AccountSetting
         fields = ['id','username', 'email', 'password', 'bio', 'created', 'updated']
 
 
-class NotificationSettingsSerializer(serializers.ModelSerializer):
+class NotificationSettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NotificationSettings
+        model = NotificationSetting
         fields = ['id','email_notifications', 'push_notifications', 'notification_frequency']

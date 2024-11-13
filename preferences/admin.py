@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AccountSettings, NotificationSettings
+from .models import AccountSetting, NotificationSetting
 
-admin.site.register(AccountSettings)
-admin.site.register(NotificationSettings)
+admin.site.register(AccountSetting)
+admin.site.register(NotificationSetting)
