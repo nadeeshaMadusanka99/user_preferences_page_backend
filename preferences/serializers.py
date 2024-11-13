@@ -1,14 +1,26 @@
 from rest_framework import serializers
-from .models import AccountSettings, NotificationSettings
+from .models import AccountSetting, NotificationSetting, ThemeSetting, PrivacySetting
 
 
-class AccountSettingsSerializer(serializers.ModelSerializer):
+class AccountSettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AccountSettings
-        fields = ['username', 'email', 'password', 'bio', 'created', 'updated']
+        model = AccountSetting
+        fields = ['id', 'username', 'email', 'password', 'bio', 'created', 'updated']
 
 
-class NotificationSettingsSerializer(serializers.ModelSerializer):
+class NotificationSettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NotificationSettings
-        fields = ['email_notifications', 'push_notifications', 'notification_frequency']
+        model = NotificationSetting
+        fields = ['id', 'email_notifications', 'push_notifications', 'notification_frequency']
+
+
+class ThemeSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ThemeSetting
+        fields = ['id', 'color', 'font', 'layout']
+
+
+class PrivacySettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivacySetting
+        fields = ['id', 'profile_visibility', 'data_sharing']
