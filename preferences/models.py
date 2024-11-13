@@ -75,8 +75,16 @@ class ThemeSetting(PreferenceCategory):
 
 
 class PrivacySetting(PreferenceCategory):
+    DATA_SHARING_CHOICES = [
+        ('all', 'All'),
+        ('friends', 'Friends'),
+        ('none', 'None'),
+    ]
+
     profile_visibility = models.BooleanField(default=True)
-    data_sharing = models.BooleanField(default=True)
+    data_sharing = models.CharField(max_length=50,
+                                    choices=DATA_SHARING_CHOICES,
+                                    default='all')
 
 
 @receiver(post_save, sender=User)
