@@ -92,6 +92,8 @@ def create_user_preferences(sender, instance, created, **kwargs):
     if created:
         AccountSetting.objects.create(user=instance, username=instance.username, email=instance.email)
         NotificationSetting.objects.create(user=instance)
+        ThemeSetting.objects.create(user=instance)
+        PrivacySetting.objects.create(user=instance)
         print('User preferences created!')
 
 
@@ -99,4 +101,6 @@ def create_user_preferences(sender, instance, created, **kwargs):
 def save_user_preferences(sender, instance, **kwargs):
     instance.accountsetting.save()
     instance.notificationsetting.save()
+    instance.themesetting.save()
+    instance.privacysetting.save()
     print('User preferences saved!')
