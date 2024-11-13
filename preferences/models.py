@@ -47,12 +47,45 @@ class NotificationSetting(PreferenceCategory):
                                               choices=FREQUENCY_CHOICES,
                                               default='instantly')
 
+
+class ThemeSetting(PreferenceCategory):
+    THEME_CHOICES = [
+        ('light', 'Light'),
+        ('dark', 'Dark'),
+    ]
+    FONT_CHOICES = [
+        ('arial', 'Arial'),
+        ('serif', 'Serif'),
+        ('sans-serif', 'Sans Serif'),
+        ('courier', 'Courier New'),
+    ]
+    LAYOUT_CHOICES = [
+        ('fixed', 'Fixed'),
+        ('fluid', 'Fluid'),
+    ]
+    color = models.CharField(max_length=50,
+                             choices=THEME_CHOICES,
+                             default='light')
+    font = models.CharField(max_length=50,
+                            choices=FONT_CHOICES,
+                            default='arial')
+    layout = models.CharField(max_length=50,
+                              choices=LAYOUT_CHOICES,
+                              default='fixed')
+
+
+class PrivacySetting(PreferenceCategory):
+    profile_visibility = models.BooleanField(default=True)
+    data_sharing = models.BooleanField(default=True)
+
+
 @receiver(post_save, sender=User)
 def create_user_preferences(sender, instance, created, **kwargs):
     if created:
         AccountSetting.objects.create(user=instance, username=instance.username, email=instance.email)
         NotificationSetting.objects.create(user=instance)
         print('User preferences created!')
+
 
 @receiver(post_save, sender=User)
 def save_user_preferences(sender, instance, **kwargs):
