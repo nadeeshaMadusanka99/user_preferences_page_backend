@@ -5,7 +5,6 @@ from .serializers import AccountSettingSerializer, NotificationSettingSerializer
     PrivacySettingSerializer
 
 
-
 @extend_schema_view(
     list=extend_schema(tags=["Account Settings"], description="List all account settings"),
     create=extend_schema(tags=["Account Settings"], description="Create a new account setting"),
@@ -82,4 +81,3 @@ class PrivacySettingViewSet(viewsets.ModelViewSet):
         if user.is_superuser:
             return PrivacySetting.objects.all()
         return PrivacySetting.objects.filter(user=user)
-
