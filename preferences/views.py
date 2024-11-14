@@ -5,6 +5,7 @@ from .serializers import AccountSettingSerializer, NotificationSettingSerializer
     PrivacySettingSerializer
 
 
+
 @extend_schema_view(
     list=extend_schema(tags=["Account Settings"], description="List all account settings"),
     create=extend_schema(tags=["Account Settings"], description="Create a new account setting"),
@@ -14,7 +15,6 @@ from .serializers import AccountSettingSerializer, NotificationSettingSerializer
     destroy=extend_schema(tags=["Account Settings"], description="Delete an account setting"),
 )
 class AccountSettingViewSet(viewsets.ModelViewSet):
-    # queryset = AccountSetting.objects.all()
     serializer_class = AccountSettingSerializer
 
     def get_queryset(self):
@@ -36,7 +36,6 @@ class AccountSettingViewSet(viewsets.ModelViewSet):
     destroy=extend_schema(tags=["Notification Settings"], description="Delete a notification setting"),
 )
 class NotificationSettingViewSet(viewsets.ModelViewSet):
-    queryset = NotificationSetting.objects.all()
     serializer_class = NotificationSettingSerializer
 
     def get_queryset(self):
@@ -56,7 +55,6 @@ class NotificationSettingViewSet(viewsets.ModelViewSet):
     destroy=extend_schema(tags=["Theme Settings"], description="Delete a theme setting"),
 )
 class ThemeSettingViewSet(viewsets.ModelViewSet):
-    queryset = ThemeSetting.objects.all()
     serializer_class = ThemeSettingSerializer
 
     def get_queryset(self):
@@ -76,7 +74,6 @@ class ThemeSettingViewSet(viewsets.ModelViewSet):
     destroy=extend_schema(tags=["Privacy Settings"], description="Delete a privacy setting"),
 )
 class PrivacySettingViewSet(viewsets.ModelViewSet):
-    queryset = PrivacySetting.objects.all()
     serializer_class = PrivacySettingSerializer
 
     def get_queryset(self):
