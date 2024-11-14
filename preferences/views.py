@@ -14,8 +14,18 @@ from .serializers import AccountSettingSerializer, NotificationSettingSerializer
     destroy=extend_schema(tags=["Account Settings"], description="Delete an account setting"),
 )
 class AccountSettingViewSet(viewsets.ModelViewSet):
-    queryset = AccountSetting.objects.all()
+    # queryset = AccountSetting.objects.all()
     serializer_class = AccountSettingSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            # Superusers can see all account settings
+            return AccountSetting.objects.all()
+        # Regular users can only see their own account settings
+        return AccountSetting.objects.filter(user=user)
+
 
 @extend_schema_view(
     list=extend_schema(tags=["Notification Settings"], description="List all notification settings"),
@@ -29,6 +39,14 @@ class NotificationSettingViewSet(viewsets.ModelViewSet):
     queryset = NotificationSetting.objects.all()
     serializer_class = NotificationSettingSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            return NotificationSetting.objects.all()
+        return NotificationSetting.objects.filter(user=user)
+
+
 @extend_schema_view(
     list=extend_schema(tags=["Theme Settings"], description="List all theme settings"),
     create=extend_schema(tags=["Theme Settings"], description="Create a new theme setting"),
@@ -40,6 +58,14 @@ class NotificationSettingViewSet(viewsets.ModelViewSet):
 class ThemeSettingViewSet(viewsets.ModelViewSet):
     queryset = ThemeSetting.objects.all()
     serializer_class = ThemeSettingSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            return ThemeSetting.objects.all()
+        return ThemeSetting.objects.filter(user=user)
+
 
 @extend_schema_view(
     list=extend_schema(tags=["Privacy Settings"], description="List all privacy settings"),
@@ -53,7 +79,10 @@ class PrivacySettingViewSet(viewsets.ModelViewSet):
     queryset = PrivacySetting.objects.all()
     serializer_class = PrivacySettingSerializer
 
-    # Assigning a tag to categorize this endpoint under "Privacy Settings"
-    @extend_schema(tags=["Privacy Settings"])
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            return PrivacySetting.objects.all()
+        return PrivacySetting.objects.filter(user=user)
+
