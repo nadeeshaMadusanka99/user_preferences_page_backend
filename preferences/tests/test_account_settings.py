@@ -72,6 +72,7 @@ class AccountSettingTest(TestCase):
 
         # Fetch the updated instance and check the username and email fields
         updated_account_setting = AccountSetting.objects.get(user=self.user)
+
         self.assertEqual(updated_account_setting.username, 'newtestuser')
         self.assertEqual(updated_account_setting.email, 'newuseremail@gmail.com')
 
