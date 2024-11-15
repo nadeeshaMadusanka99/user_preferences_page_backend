@@ -1,12 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+import uuid
+
+
+class User(AbstractUser):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    class Meta:
+        db_table = 'auth_user'
 
 
 # Base model for preference categories
 class PreferenceCategory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -14,10 +29,18 @@ class PreferenceCategory(models.Model):
     class Meta:
         abstract = True
 
+    def delete(self, *args, **kwargs):
+        # Prevent deletion if the related User still exists
+        if self.user and User.objects.filter(id=self.user.id).exists():
+            raise ValidationError(
+                "Cannot delete this setting while the related User exists. Please delete the User."
+            )
+        super().delete(*args, **kwargs)
+
 
 class AccountSetting(PreferenceCategory):
     username = models.CharField(max_length=50)
-    email = models.EmailField()
+    email = models.EmailField(null=True, blank=True)
     password = models.CharField(max_length=128)
     bio = models.TextField(null=True, blank=True)
 
@@ -97,11 +120,11 @@ class PrivacySetting(PreferenceCategory):
 @receiver(post_save, sender=User)
 def create_user_preferences(sender, instance, created, **kwargs):
     if created:
-        AccountSetting.objects.create(user=instance, username=instance.username, email=instance.email)
+        AccountSetting.objects.create(user=instance, username=instance.username, email=instance.email,
+                                      password=instance.password)
         NotificationSetting.objects.create(user=instance)
         ThemeSetting.objects.create(user=instance)
         PrivacySetting.objects.create(user=instance)
-        print('User preferences created!')
 
 
 @receiver(post_save, sender=User)
@@ -110,4 +133,11 @@ def save_user_preferences(sender, instance, **kwargs):
     instance.notificationsetting.save()
     instance.themesetting.save()
     instance.privacysetting.save()
-    print('User preferences saved!')
+
+
+@receiver(pre_delete, sender=User)
+def delete_user_preferences(sender, instance, **kwargs):
+    AccountSetting.objects.filter(user=instance).delete()
+    NotificationSetting.objects.filter(user=instance).delete()
+    ThemeSetting.objects.filter(user=instance).delete()
+    PrivacySetting.objects.filter(user=instance).delete()
