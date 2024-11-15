@@ -21,7 +21,8 @@ env/
 db.sqlite3
 
 # Migrations
-**/migrations/**
+*/migrations/*.pyc
+*/migrations/__pycache__/
 
 # Django Static Files
 staticfiles/
