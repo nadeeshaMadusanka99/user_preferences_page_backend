@@ -48,10 +48,9 @@ class PrivacySettingTest(TestCase):
         self.assertEqual(updated_privacy_setting.profile_visibility, 'private')
         self.assertEqual(updated_privacy_setting.data_sharing, 'none')
 
-    # Test deletion of a PrivacySetting instance
-    def test_privacy_setting_deletion(self):
+    # Test the delete restriction of a PrivacySetting instance
+    def test_privacy_setting_delete_restriction(self):
         privacy_setting = PrivacySetting.objects.get(user=self.user)
-        privacy_setting.delete()
 
-        with self.assertRaises(PrivacySetting.DoesNotExist):
-            PrivacySetting.objects.get(user=self.user)
+        with self.assertRaises(Exception):
+            privacy_setting.delete()

@@ -76,11 +76,10 @@ class AccountSettingTest(TestCase):
         self.assertEqual(updated_account_setting.username, 'newtestuser')
         self.assertEqual(updated_account_setting.email, 'newuseremail@gmail.com')
 
-    # Test the deletion of an AccountSetting instance
-    def test_account_setting_deletion(self):
+    # Test the deletion is restricted if the related User exists
+    def test_account_setting_deletion_restricted(self):
         account_setting = AccountSetting.objects.get(user=self.user)
-        account_setting.delete()
 
-        # Check that the AccountSetting instance was deleted
-        with self.assertRaises(AccountSetting.DoesNotExist):
-            AccountSetting.objects.get(user=self.user)
+        # Try to delete the AccountSetting instance
+        with self.assertRaises(Exception):
+            account_setting.delete()

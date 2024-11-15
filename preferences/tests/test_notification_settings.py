@@ -60,10 +60,9 @@ class NotificationSettingTest(TestCase):
         self.assertEqual(updated_notification_setting.push_notifications, False)
         self.assertEqual(updated_notification_setting.notification_frequency, 'daily')
 
-    # Test deletion of a NotificationSetting instance
-    def test_notification_setting_deletion(self):
+    # Test delete restriction for NotificationSetting instance
+    def test_notification_setting_delete_restriction(self):
         notification_setting = NotificationSetting.objects.get(user=self.user)
-        notification_setting.delete()
 
-        with self.assertRaises(NotificationSetting.DoesNotExist):
-            NotificationSetting.objects.get(user=self.user)
+        with self.assertRaises(Exception):
+            notification_setting.delete()

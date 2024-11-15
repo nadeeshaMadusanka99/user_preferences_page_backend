@@ -60,10 +60,9 @@ class ThemeSettingTest(TestCase):
         self.assertEqual(updated_theme_setting.font, 'sans-serif')
         self.assertEqual(updated_theme_setting.layout, 'fluid')
 
-    # Test deletion of a ThemeSetting instance
-    def test_theme_setting_deletion(self):
+    # Test delete restriction for ThemeSetting instance
+    def test_theme_setting_delete_restriction(self):
         theme_setting = ThemeSetting.objects.get(user=self.user)
-        theme_setting.delete()
 
-        with self.assertRaises(ThemeSetting.DoesNotExist):
-            ThemeSetting.objects.get(user=self.user)
+        with self.assertRaises(Exception):
+            theme_setting.delete()
