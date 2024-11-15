@@ -37,6 +37,7 @@ class PreferenceCategory(models.Model):
             )
         super().delete(*args, **kwargs)
 
+
 class AccountSetting(PreferenceCategory):
     username = models.CharField(max_length=50)
     email = models.EmailField(null=True, blank=True)
