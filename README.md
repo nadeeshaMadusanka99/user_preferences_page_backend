@@ -4,7 +4,7 @@
 This project is a **User Preferences Management System** built with Django and Django Rest Framework (DRF) for handling user-specific preferences like Account Settings, Notification Settings, Privacy Settings, and Theme Settings.
 
 ## Key Features:
-- **User Types**: he system supports two user types: Super Admins with full access and Normal Users who can manage their own preferences.
+- **User Types**: The system supports two user types: Super Admins with full access and Normal Users who can manage their own preferences.
 - **User Preference Management**: Users can update their account settings, privacy settings, notification preferences, and theme settings.
 - **Validation**: Enforces constraints to prevent multiple preference objects for the same user.
 - **RESTful API**: Exposes endpoints for handling user preferences using Django Rest Framework.
