@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.exceptions import PermissionDenied, NotFound, MethodNotAllowed
 
 from .models import AccountSetting, NotificationSetting, ThemeSetting, PrivacySetting
 from .serializers import AccountSettingSerializer, NotificationSettingSerializer, ThemeSettingSerializer, \
@@ -30,11 +30,13 @@ class BasePreferenceSettingViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    def perform_create(self, serializer):
-        try:
-            serializer.save(user=self.request.user)
-        except Exception as e:
-            raise ValidationError(f"Error creating object: {str(e)}")
+    def check_duplicate_for_user(self, user):
+        if self.queryset.filter(user=user).exists():
+            raise ValidationError(f"A {self.queryset.model.__name__} already exists for this user.")
+
+    def create(self, request, *args, **kwargs):
+        # Disable the POST method by raising an exception
+        raise MethodNotAllowed("POST", detail="Creating settings is not allowed via this endpoint.")
 
     def destroy(self, request, *args, **kwargs):
         try:

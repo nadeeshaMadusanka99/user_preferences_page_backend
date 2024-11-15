@@ -28,6 +28,7 @@ class PreferenceCategory(models.Model):
 
     class Meta:
         abstract = True
+
     def delete(self, *args, **kwargs):
         # Prevent deletion if the related User still exists
         if self.user and User.objects.filter(id=self.user.id).exists():
