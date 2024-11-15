@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 import uuid
 
 
@@ -27,7 +28,13 @@ class PreferenceCategory(models.Model):
 
     class Meta:
         abstract = True
-
+    def delete(self, *args, **kwargs):
+        # Prevent deletion if the related User still exists
+        if self.user and User.objects.filter(id=self.user.id).exists():
+            raise ValidationError(
+                "Cannot delete this setting while the related User exists. Please delete the User."
+            )
+        super().delete(*args, **kwargs)
 
 class AccountSetting(PreferenceCategory):
     username = models.CharField(max_length=50)

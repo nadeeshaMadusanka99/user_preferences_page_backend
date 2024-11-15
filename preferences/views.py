@@ -3,7 +3,29 @@ from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import AccountSetting, NotificationSetting, ThemeSetting, PrivacySetting
 from .serializers import AccountSettingSerializer, NotificationSettingSerializer, ThemeSettingSerializer, \
     PrivacySettingSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.exceptions import ValidationError
 
+
+class BasePreferenceSettingViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            return self.queryset.all()  # This will be set in the child viewsets
+        return self.queryset.filter(user=user)  # This will filter based on the user
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema_view(
     list=extend_schema(tags=["Account Settings"], description="List all account settings"),
@@ -13,18 +35,9 @@ from .serializers import AccountSettingSerializer, NotificationSettingSerializer
     partial_update=extend_schema(tags=["Account Settings"], description="Partially update an account setting"),
     destroy=extend_schema(tags=["Account Settings"], description="Delete an account setting"),
 )
-class AccountSettingViewSet(viewsets.ModelViewSet):
+class AccountSettingViewSet(BasePreferenceSettingViewSet):
     serializer_class = AccountSettingSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-
-        if user.is_superuser:
-            # Superusers can see all account settings
-            return AccountSetting.objects.all()
-        # Regular users can only see their own account settings
-        return AccountSetting.objects.filter(user=user)
-
+    queryset = AccountSetting.objects.all()
 
 @extend_schema_view(
     list=extend_schema(tags=["Notification Settings"], description="List all notification settings"),
@@ -34,15 +47,9 @@ class AccountSettingViewSet(viewsets.ModelViewSet):
     partial_update=extend_schema(tags=["Notification Settings"], description="Partially update a notification setting"),
     destroy=extend_schema(tags=["Notification Settings"], description="Delete a notification setting"),
 )
-class NotificationSettingViewSet(viewsets.ModelViewSet):
+class NotificationSettingViewSet(BasePreferenceSettingViewSet):
     serializer_class = NotificationSettingSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-
-        if user.is_superuser:
-            return NotificationSetting.objects.all()
-        return NotificationSetting.objects.filter(user=user)
+    queryset = NotificationSetting.objects.all()
 
 
 @extend_schema_view(
@@ -53,16 +60,9 @@ class NotificationSettingViewSet(viewsets.ModelViewSet):
     partial_update=extend_schema(tags=["Theme Settings"], description="Partially update a theme setting"),
     destroy=extend_schema(tags=["Theme Settings"], description="Delete a theme setting"),
 )
-class ThemeSettingViewSet(viewsets.ModelViewSet):
+class ThemeSettingViewSet(BasePreferenceSettingViewSet):
     serializer_class = ThemeSettingSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-
-        if user.is_superuser:
-            return ThemeSetting.objects.all()
-        return ThemeSetting.objects.filter(user=user)
-
+    queryset = ThemeSetting.objects.all()
 
 @extend_schema_view(
     list=extend_schema(tags=["Privacy Settings"], description="List all privacy settings"),
@@ -72,12 +72,6 @@ class ThemeSettingViewSet(viewsets.ModelViewSet):
     partial_update=extend_schema(tags=["Privacy Settings"], description="Partially update a privacy setting"),
     destroy=extend_schema(tags=["Privacy Settings"], description="Delete a privacy setting"),
 )
-class PrivacySettingViewSet(viewsets.ModelViewSet):
+class PrivacySettingViewSet(BasePreferenceSettingViewSet):
     serializer_class = PrivacySettingSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-
-        if user.is_superuser:
-            return PrivacySetting.objects.all()
-        return PrivacySetting.objects.filter(user=user)
+    queryset = PrivacySetting.objects.all()
