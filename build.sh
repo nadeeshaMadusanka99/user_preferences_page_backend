@@ -2,7 +2,7 @@
 
 # Build the project
 echo "Building the project..."
-python3.9 -m pip install -r requirements.txt
+pip install -r requirements.txt
 
 # Make migrations and migrate the database
 echo "Make migrations..."
