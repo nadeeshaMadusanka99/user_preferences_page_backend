@@ -11,6 +11,7 @@ from rest_framework import status
 from django.core.exceptions import ValidationError
 
 
+# Base class for all views
 class BasePreferenceSettingViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -29,10 +30,6 @@ class BasePreferenceSettingViewSet(viewsets.ModelViewSet):
             raise NotFound(detail=f"No {self.queryset.model.__name__} data found for the user.")
 
         return queryset
-
-    def check_duplicate_for_user(self, user):
-        if self.queryset.filter(user=user).exists():
-            raise ValidationError(f"A {self.queryset.model.__name__} already exists for this user.")
 
     def create(self, request, *args, **kwargs):
         # Disable the POST method by raising an exception

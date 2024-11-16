@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+import os
 import uuid
 
 
@@ -46,9 +47,11 @@ class AccountSetting(PreferenceCategory):
 
     def save(self, *args, **kwargs):
         password_value = self.password
+
         # Hash the password if it's not already hashed
         if not password_value.startswith('pbkdf2'):
-            self.password = make_password(self.password)
+            salt = os.urandom(32).hex()
+            self.password = make_password(self.password, salt=salt)
         super().save(*args, **kwargs)
 
     def check_password(self, raw_password):
@@ -125,14 +128,6 @@ def create_user_preferences(sender, instance, created, **kwargs):
         NotificationSetting.objects.create(user=instance)
         ThemeSetting.objects.create(user=instance)
         PrivacySetting.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_preferences(sender, instance, **kwargs):
-    instance.accountsetting.save()
-    instance.notificationsetting.save()
-    instance.themesetting.save()
-    instance.privacysetting.save()
 
 
 @receiver(pre_delete, sender=User)
