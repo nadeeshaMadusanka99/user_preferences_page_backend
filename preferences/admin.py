@@ -28,6 +28,7 @@ class ThemeSettingAdmin(UserNameAdmin, admin.ModelAdmin):
 class PrivacySettingAdmin(UserNameAdmin, admin.ModelAdmin):
     list_display = ['user_name', 'profile_visibility', 'data_sharing']
 
+
 # Custom User Admin
 class CustomUserAdmin(UserAdmin):
     model = User
