@@ -1,8 +1,13 @@
 #!/bin/bash
 
+#Config the environment
+
+python3.9 -m ensurepip --upgrade
+python3.9 -m pip install --upgrade pip
+
 # Build the project
 echo "Building the project..."
-pip install -r requirements.txt
+python3.9 -m pip install -r requirements.txt
 
 # Make migrations and migrate the database
 echo "Make migrations..."
