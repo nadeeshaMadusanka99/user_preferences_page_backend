@@ -55,7 +55,7 @@ The app should now be running at http://localhost:8000.
 - The app is tested against common edge cases, authentication errors, and valid/invalid data inputs.
 - To run the tests, use:
    ```bash
-   python manage.py test test.preferences
+   python manage.py test tests.preferences
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
