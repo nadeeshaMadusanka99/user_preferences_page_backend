@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -26,7 +28,6 @@ SECRET_KEY = 'django-insecure-44%*)-m(%s&^ux-8-vdn5e4esr6%ys8p=c5*n#1@b4u48)s6^i
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app']
-
 
 # Application definition
 
@@ -72,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'root.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -82,6 +82,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASE_URL = config('DATABASE_URL', default=None)
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
 
 AUTH_USER_MODEL = 'preferences.User'
 
@@ -130,11 +134,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles_build" / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
